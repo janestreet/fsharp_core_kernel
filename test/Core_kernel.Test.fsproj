@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <OtherFlags Condition="'$(JENGA_ROOT_PATH)' == ''">--sig:ModuleSignatures.generated</OtherFlags>
+    <OtherFlags Condition="'$(JENGA_ROOT_PATH)' != ''">--sig:ModuleSignatures.jenga.generated</OtherFlags>
+    <OtherFlags>--warnaserror+ --warnon:1182,3218 $(OtherFlags)</OtherFlags>
+    <EmbedAllSources>true</EmbedAllSources>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Error.fs" />
+    <Compile Include="Time.fs" />
+    <Compile Include="Host_and_port.fs" />
+    <Compile Include="Log_test.fs" />
+    <Compile Include="User_groups_test.fs" />
+    <Compile Include="Map_test.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.13.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../src/Core_kernel.fsproj" />
+  </ItemGroup>
+</Project>
