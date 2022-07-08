@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This is named [Core_kernel] instead of [Core] since [Core] aliases to [Fsharp.Core] -->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateProgramFile>false</GenerateProgramFile>
+    <OtherFlags Condition="'$(JENGA_ROOT_PATH)' == ''">--sig:ModuleSignatures.generated</OtherFlags>
+    <OtherFlags Condition="'$(JENGA_ROOT_PATH)' != ''">--sig:ModuleSignatures.jenga.generated</OtherFlags>
+    <OtherFlags>--warnaserror+ --warnon:1182,3218 $(OtherFlags)</OtherFlags>
+    <EmbedAllSources>true</EmbedAllSources>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Either.fsi" />
+    <Compile Include="Either.fs" />
+    <Compile Include="List.fsi" />
+    <Compile Include="List.fs" />
+    <Compile Include="Result.fsi" />
+    <Compile Include="Result.fs" />
+    <Compile Include="Sexp.fsi" />
+    <Compile Include="Sexp.fs" />
+    <Compile Include="Error.fsi" />
+    <Compile Include="Error.fs" />
+    <Compile Include="Or_error.fsi" />
+    <Compile Include="Or_error.fs" />
+    <Compile Include="Sequencer.fsi" />
+    <Compile Include="Sequencer.fs" />
+    <Compile Include="Auto_reset_event.fsi" />
+    <Compile Include="Auto_reset_event.fs" />
+    <Compile Include="Time_source.fsi" />
+    <Compile Include="Time_source.fs" />
+    <Compile Include="Dictionary.fsi" />
+    <Compile Include="Dictionary.fs" />
+    <Compile Include="Concurrent_dictionary.fsi" />
+    <Compile Include="Concurrent_dictionary.fs" />
+    <Compile Include="Thread.fsi" />
+    <Compile Include="Thread.fs" />
+    <Compile Include="Set.fsi" />
+    <Compile Include="Set.fs" />
+    <Compile Include="Map.fsi" />
+    <Compile Include="Map.fs" />
+    <Compile Include="Blocking_queue.fsi" />
+    <Compile Include="Blocking_queue.fs" />
+    <Compile Include="Integer.fsi" />
+    <Compile Include="Integer.fs" />
+    <Compile Include="Regex.fsi" />
+    <Compile Include="Regex.fs" />
+    <Compile Include="Host_and_port.fsi" />
+    <Compile Include="Host_and_port.fs" />
+    <Compile Include="Time_float.fsi" />
+    <Compile Include="Time_float.fs" />
+    <Compile Include="Time_ns.fsi" />
+    <Compile Include="Time_ns.fs" />
+    <Compile Include="Log.fsi" />
+    <Compile Include="Log.fs" />
+    <Compile Include="Thread_safe_run_once.fsi" />
+    <Compile Include="Thread_safe_run_once.fs" />
+    <Compile Include="Bimap.fsi" />
+    <Compile Include="Bimap.fs" />
+    <Compile Include="Configuration_manager.fsi" />
+    <Compile Include="Configuration_manager.fs" />
+    <Compile Include="Hostname.fsi" />
+    <Compile Include="Hostname.fs" />
+    <Compile Include="IPAddress.fsi" />
+    <Compile Include="IPAddress.fs" />
+    <Compile Include="User_groups.fsi" />
+    <Compile Include="User_groups.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\generated\Core_kernel.Bin_prot_generated_types.fsproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
+  </ItemGroup>
+</Project>
