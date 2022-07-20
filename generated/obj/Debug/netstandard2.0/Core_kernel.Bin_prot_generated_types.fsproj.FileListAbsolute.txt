@@ -1,8 +1,0 @@
-/home/ubuntu/fsharp_core_kernel/generated/bin/Debug/netstandard2.0/Core_kernel.Bin_prot_generated_types.deps.json
-/home/ubuntu/fsharp_core_kernel/generated/bin/Debug/netstandard2.0/Core_kernel.Bin_prot_generated_types.dll
-/home/ubuntu/fsharp_core_kernel/generated/bin/Debug/netstandard2.0/Bin_prot.dll
-/home/ubuntu/fsharp_core_kernel/generated/obj/Debug/netstandard2.0/Core_kernel.Bin_prot_generated_types.fsproj.AssemblyReference.cache
-/home/ubuntu/fsharp_core_kernel/generated/obj/Debug/netstandard2.0/Core_kernel.Bin_prot_generated_types.AssemblyInfoInputs.cache
-/home/ubuntu/fsharp_core_kernel/generated/obj/Debug/netstandard2.0/Core_kernel.Bin_prot_generated_types.AssemblyInfo.fs
-/home/ubuntu/fsharp_core_kernel/generated/obj/Debug/netstandard2.0/Core_kernel.Bin_prot_generated_types.fsproj.CopyComplete
-/home/ubuntu/fsharp_core_kernel/generated/obj/Debug/netstandard2.0/Core_kernel.Bin_prot_generated_types.dll
