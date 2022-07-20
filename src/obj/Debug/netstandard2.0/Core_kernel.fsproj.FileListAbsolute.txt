@@ -1,0 +1,9 @@
+/home/ubuntu/fsharp_core_kernel/src/bin/Debug/netstandard2.0/Core_kernel.deps.json
+/home/ubuntu/fsharp_core_kernel/src/bin/Debug/netstandard2.0/Core_kernel.dll
+/home/ubuntu/fsharp_core_kernel/src/bin/Debug/netstandard2.0/Bin_prot.dll
+/home/ubuntu/fsharp_core_kernel/src/bin/Debug/netstandard2.0/Core_kernel.Bin_prot_generated_types.dll
+/home/ubuntu/fsharp_core_kernel/src/obj/Debug/netstandard2.0/Core_kernel.fsproj.AssemblyReference.cache
+/home/ubuntu/fsharp_core_kernel/src/obj/Debug/netstandard2.0/Core_kernel.AssemblyInfoInputs.cache
+/home/ubuntu/fsharp_core_kernel/src/obj/Debug/netstandard2.0/Core_kernel.AssemblyInfo.fs
+/home/ubuntu/fsharp_core_kernel/src/obj/Debug/netstandard2.0/Core_kernel.fsproj.CopyComplete
+/home/ubuntu/fsharp_core_kernel/src/obj/Debug/netstandard2.0/Core_kernel.dll
