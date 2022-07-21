@@ -5,13 +5,6 @@ module Arg_type =
     let create of_string = { parse = of_string }
 
 module Flag =
-    (* module Num_occurrences =
-        type t = { at_least_once : bool ; at_most_once : bool }
-        //let any = { at_least_once = false ; at_most_once = false }
-        //let at_least_once = { at_least_once = true ; at_most_once = false }
-        let at_most_once = { at_least_once = false ; at_most_once = true }
-        let exactly_once = { at_least_once = true ; at_most_once = true } *)
-
     type 'a t =
         { read: string list -> 'a
           name: string
