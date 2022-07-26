@@ -109,6 +109,7 @@ possible flags:
 -test                Test flag doc
 
 "
+
     Assert.AreEqual(output, expected_output)
 
 [<Test>]
