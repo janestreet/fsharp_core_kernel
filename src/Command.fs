@@ -5,54 +5,71 @@ module Arg_type =
     let create of_string = { parse = of_string }
 
 module Flag =
+    module Info =
+        type t =
+            { name: string
+              doc: string
+              no_arg: bool }
+
     type 'a t =
-        { read: string list -> 'a
-          name: string
-          doc: string
-          required: bool
-          no_arg: bool }
+        { read: string option -> 'a
+          info: Info.t }
 
     let required (arg_type: 'a Arg_type.t) (name: string) (doc: string) =
-        { read = (fun arg -> (arg_type.parse (List.exactlyOne arg))) // CR-soon Jade exactlyOne will change to Num_occurrences later for a more specific error message
-          name = name
-          doc = doc
-          required = true
-          no_arg = false }
+        { read =
+            (function
+            | Some arg -> (arg_type.parse arg)
+            | None -> failwith "Required arg not supplied, refer to -help")
+          info =
+            { name = name
+              doc = doc
+              no_arg = false } }
 
     let optional (arg_type: 'a Arg_type.t) (name: string) (doc: string) =
         { read =
-            (fun arg ->
-                if List.length arg > 0 then
-                    Some(arg_type.parse (List.exactlyOne arg))
-                else
-                    None)
-          name = name
-          doc = doc
-          required = false
-          no_arg = false }
+            (function
+            | Some arg -> Some(arg_type.parse arg)
+            | None -> None)
+          info =
+            { name = name
+              doc = doc
+              no_arg = false } }
 
     let no_arg (name: string) (doc: string) =
-        { read = (fun flag -> not (List.isEmpty flag))
-          name = name
-          doc = doc
-          required = false
-          no_arg = true }
+        { read =
+            (fun flag ->
+                match flag with
+                | Some _ -> true
+                | None -> false)
+          info =
+            { name = name
+              doc = doc
+              no_arg = true } }
 
 module Parser =
     type 'a t = string list -> 'a * string list
-  
+
+    let error_message flag =
+        "Unknown flag "
+        + flag
+        + ", refer to -help for possible flags"
+
     let bind (x: 'a t) (f: 'a -> 'b t) =
         fun (args: string list) ->
             let parser_type, args = x args
-            if not (List.isEmpty args) then 
-                failwith ("Unknown flag " + args[0] + ", refer to -help for possible flags")
+
+            if not (List.isEmpty args) then
+                failwith (error_message args[0])
+
             (f parser_type) args
 
     let map (x: 'a t) (f: 'a -> 'b) =
         fun (args: string list) ->
             let parser_type, args = x args
-            if not (List.isEmpty args) then 
-                failwith ("Unknown flag " + args[0] + ", refer to -help for possible flags")
+
+            if not (List.isEmpty args) then
+                failwith (error_message args[0])
+
             f parser_type, args
 
     let both (x: 'a t) (y: 'b t) : ('a * 'b) t =
@@ -67,58 +84,47 @@ module Parser =
 module Param =
     type 'a t =
         { parser: 'a Parser.t
-          flags: (string * string) list
-          anons: string list }
+          flags: Flag.Info.t list }
 
-    let parse (flag: 'a t) (args: string list) =
-        flag.parser args 
+    let parse (t: 'a t) (args: string list) = t.parser args
 
     let flag (f: 'a Flag.t) =
         { parser =
             fun args ->
-                if List.exists (fun flag -> f.name = flag) args
-                   && not f.no_arg then
-                    let flag_index = List.findIndex (fun flag -> f.name = flag) args
-                    let args = List.removeAt flag_index args
-                    f.read [ args[flag_index] ], List.removeAt flag_index args
-                else if f.required = true && not f.no_arg then
-                    failwith "Required arg not supplied, refer to -help"
-                else if List.exists (fun flag -> f.name = flag) args then
-                    let flag_index = List.findIndex (fun flag -> f.name = flag) args
-                    f.read [args[0]], List.removeAt flag_index args
-                else 
-                    f.read [], args
-          flags = [ (f.name, f.doc) ]
-          anons = [] }
+                if f.info.no_arg then
+                    match List.tryFindIndex (fun flag -> f.info.name = flag) args with
+                    | Some index -> f.read (Some(args[index])), List.removeAt index args
+                    | None -> f.read None, args
+                else
+                    match List.tryFindIndex (fun flag -> f.info.name = flag) args with
+                    | Some index ->
+                        let args = List.removeAt index args
+                        f.read (Some(args[index])), List.removeAt index args
+                    | None -> f.read None, args
+          flags = [ f.info ] }
 
 
     let bind (x: 'a t) (f: 'a -> 'b t) =
         let f x =
             let f_param = f x
             f_param.parser
+
         { parser = Parser.bind x.parser f
-          flags = x.flags
-          anons = x.anons }
+          flags = x.flags }
 
     let map (x: 'a t) (f: 'a -> 'b) =
         { parser = Parser.map x.parser f
-          flags = x.flags
-          anons = x.anons }
+          flags = x.flags }
 
     let both (x: 'a t) (y: 'b t) : ('a * 'b) t =
         { parser = Parser.both x.parser y.parser
-          flags = x.flags @ y.flags
-          anons = x.anons @ y.anons }
+          flags = x.flags @ y.flags }
 
     let return_ (x: 'a) =
         { parser = Parser.return_ x
-          flags = []
-          anons = [] }
+          flags = [] }
 
-    let zero () =
-        { parser = Parser.zero ()
-          flags = []
-          anons = [] }
+    let zero () = { parser = Parser.zero (); flags = [] }
 
     [<Sealed>]
     type ResultBuilder() =
@@ -130,25 +136,28 @@ module Param =
 
     let let_syntax = ResultBuilder()
 
-let run_exn (param: unit Param.t) (args: string list) = 
-    if List.contains "-help" args then 
+let run_exn (param: unit Param.t) (args: string list) =
+    if List.contains "-help" args then
         printfn ""
         printfn "possible flags:"
         printfn ""
         let possible_flags = param.flags
+
         for flag in possible_flags do
-            let name, doc = flag
-            printfn "%-*s %s" 20 name doc 
+            let name = flag.name
+            let doc = flag.doc
+            printfn "%-*s %s" 20 name doc
+
         printfn ""
-        0
-    else 
-        let _, _ = Param.parse param args
-        0
+    else
+        (* Since unit Param.t always returns a unit and there should be no remaining arguments in the string list,
+           we can ignore what is returned here *)
+        let (_: unit), (_: string list) = Param.parse param args
+        ()
 
 let run (param: unit Param.t) (args: string list) =
-    match Or_error.try_with (fun () -> run_exn param args) with 
-    | Ok exit_code -> exit_code
-    | Error error -> 
-        printfn "%A" error 
+    match Or_error.try_with (fun () -> run_exn param args) with
+    | Ok _ -> 0
+    | Error error ->
+        printfn "%A" error
         1
-     
