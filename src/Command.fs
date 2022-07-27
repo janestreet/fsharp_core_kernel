@@ -19,7 +19,7 @@ module Flag =
         { read =
             (function
             | Some arg -> (arg_type.parse arg)
-            | None -> failwith "Required arg not supplied, refer to -help")
+            | None -> failwith ("Required flag " + name + " not supplied, refer to -help"))
           info =
             { name = name
               doc = doc
@@ -37,10 +37,9 @@ module Flag =
 
     let no_arg (name: string) (doc: string) =
         { read =
-            (fun flag ->
-                match flag with
-                | Some _ -> true
-                | None -> false)
+            (function
+            | Some _ -> true
+            | None -> false)
           info =
             { name = name
               doc = doc

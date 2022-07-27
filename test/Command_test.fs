@@ -118,13 +118,7 @@ let ``unknown_flag`` () =
     use string_writer = new StringWriter()
     Console.SetOut(string_writer)
 
-    let (test_arg: Test.t Arg_type.t) = Arg_type.create (fun string -> string)
-
-    let (test_flag: Test.t option Flag.t) =
-        Flag.optional (test_arg: Test.t Arg_type.t) "-test" "Test flag doc"
-
-    let (test_param: Test.t option Param.t) =
-        Param.flag (test_flag: Test.t option Flag.t)
+    let test_param = Opt_test.opt_param
 
     let x =
         Param.let_syntax {
@@ -146,12 +140,7 @@ let ``no_required_arg`` () =
     use string_writer = new StringWriter()
     Console.SetOut(string_writer)
 
-    let (test_arg: Test.t Arg_type.t) = Arg_type.create (fun string -> string)
-
-    let (test_flag: Test.t Flag.t) =
-        Flag.required (test_arg: Test.t Arg_type.t) "-test" "Test flag doc"
-
-    let (test_param: Test.t Param.t) = Param.flag (test_flag: Test.t Flag.t)
+    let test_param = Test.test_param
 
     let x =
         Param.let_syntax {
@@ -163,6 +152,6 @@ let ``no_required_arg`` () =
     let output = string_writer.ToString().Split("\n")
 
     let expected_output =
-        "String  \"System.Exception: Required arg not supplied, refer to -help"
+        "String  \"System.Exception: Required flag -test not supplied, refer to -help"
 
     Assert.AreEqual(output[0] + output[1], expected_output)
