@@ -16,6 +16,7 @@
     <Compile Include="Log_test.fs" />
     <Compile Include="User_groups_test.fs" />
     <Compile Include="Map_test.fs" />
+    <Compile Include="Command_test.fs" />
   </ItemGroup>
 
   <ItemGroup>
