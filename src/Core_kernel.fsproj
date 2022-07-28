@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This is named [Core_kernel] instead of [Core] since [Core] aliases to [Fsharp.Core] -->
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
@@ -11,7 +11,6 @@
     <EmbedAllSources>true</EmbedAllSources>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="Either.fsi" />
     <Compile Include="Either.fs" />
@@ -67,6 +66,8 @@
     <Compile Include="IPAddress.fs" />
     <Compile Include="User_groups.fsi" />
     <Compile Include="User_groups.fs" />
+    <Compile Include="Command.fsi" />
+    <Compile Include="Command.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\generated\Core_kernel.Bin_prot_generated_types.fsproj" />
