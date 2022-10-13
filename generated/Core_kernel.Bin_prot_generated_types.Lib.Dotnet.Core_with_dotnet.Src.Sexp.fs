@@ -18,7 +18,7 @@ module T = struct
         bin_write_string buf pos v1
     | List v1 ->
         let pos = Bin_prot.Write.bin_write_int_8bit buf pos 1 in
-        (bin_write_list bin_write_t) buf pos v1
+        bin_write_list bin_write_t buf pos v1
   let bin_writer_t =
     {
       Bin_prot.Type_class.size = bin_size_t;

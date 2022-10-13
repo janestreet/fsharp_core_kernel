@@ -7,13 +7,13 @@ open System.Threading
 
 type t = Thread
 
-let spawn desc f =
+let spawn (desc : string) f =
   let f () =
     try
       f ()
     with
     | :? System.Threading.ThreadAbortException -> ()
-    | e -> printf "thread %s died with exception %O" desc e
+    | e -> System.Console.WriteLine("thread {0} died with exception {1}", desc, e)
 
   let th = new Thread(f)
   th.Start()

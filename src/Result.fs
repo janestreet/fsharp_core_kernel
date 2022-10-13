@@ -33,6 +33,11 @@ let iter t f =
   | Ok v -> f v
   | Error (_ : 'a) -> ()
 
+let iter_error t f =
+  match t with
+  | Ok (_ : 'a) -> ()
+  | Error e -> f e
+
 let join =
   function
   | Ok (Ok x) -> Ok x
@@ -62,3 +67,7 @@ let all ts =
     }
 
   loop [] ts
+
+let all_unit ts =
+  all ts
+  |> Result.map (ignore : (unit list -> unit))

@@ -9,84 +9,48 @@ module Flag =
     type t =
       { name : string
         doc : string
-        aliases : string list
         no_arg : bool }
 
   type 'a t =
     { read : string option -> 'a
       info : Info.t }
 
-  let required
-    (arg_type : 'a Arg_type.t)
-    (name : string)
-    (doc : string)
-    (aliases : string list)
-    =
+  let required (arg_type : 'a Arg_type.t) (name : string) (doc : string) =
     { read =
         (function
         | Some arg -> (arg_type.parse arg)
-        | None ->
-          failwith (
-            "Required flag "
-            + name
-            + " not supplied, refer to -help"
-          ))
+        | None -> failwithf $"Required flag {name} not supplied, refer to -help")
       info =
         { name = name
           doc = doc
-          aliases = aliases
           no_arg = false } }
 
-  let optional
-    (arg_type : 'a Arg_type.t)
-    (name : string)
-    (doc : string)
-    (aliases : string list)
-    =
-    { read =
-        (function
-        | Some arg -> Some(arg_type.parse arg)
-        | None -> None)
+  let optional (arg_type : 'a Arg_type.t) (name : string) (doc : string) =
+    { read = (fun x -> Option.map arg_type.parse x)
       info =
         { name = name
           doc = doc
-          aliases = aliases
           no_arg = false } }
 
-  let no_arg (name : string) (doc : string) (aliases : string list) =
-    { read =
-        (function
-        | Some _ -> true
-        | None -> false)
+  let no_arg (name : string) (doc : string) =
+    { read = Option.isSome
       info =
         { name = name
           doc = doc
-          aliases = aliases
           no_arg = true } }
 
 module Parser =
   type 'a t = string list -> 'a * string list
 
   let error_message flag =
-    "Unknown flag "
-    + flag
-    + ", refer to -help for possible flags"
-
-  let bind (x : 'a t) (f : 'a -> 'b t) =
-    fun (args : string list) ->
-      let parser_type, args = x args
-
-      if not (List.isEmpty args) then
-        failwith (error_message args[0])
-
-      (f parser_type) args
+    $"Unknown flag {flag}, refer to -help for possible flags"
 
   let map (x : 'a t) (f : 'a -> 'b) =
     fun (args : string list) ->
       let parser_type, args = x args
 
       if not (List.isEmpty args) then
-        failwith (error_message args[0])
+        failwith (error_message args.[0])
 
       f parser_type, args
 
@@ -106,45 +70,20 @@ module Param =
 
   let parse (t : 'a t) (args : string list) = t.parser args
 
-  let rec check_aliases (args : string list) (aliases : string list) =
-    match aliases with
-    | head :: tail ->
-      match List.tryFindIndex (fun flag -> head = flag) args with
-      | Some index -> Some(index)
-      | None -> check_aliases args tail
-    | [] -> None
-
   let flag (f : 'a Flag.t) =
     { parser =
         fun args ->
           if f.info.no_arg then
             match List.tryFindIndex (fun flag -> f.info.name = flag) args with
-            | Some index -> f.read (Some(args[index])), List.removeAt index args
-            | None ->
-              match (check_aliases args f.info.aliases) with
-              | Some index -> f.read (Some(args[index])), List.removeAt index args
-              | None -> f.read None, args
+            | Some index -> f.read (Some(args.[index])), List.removeAt index args
+            | None -> f.read None, args
           else
             match List.tryFindIndex (fun flag -> f.info.name = flag) args with
             | Some index ->
               let args = List.removeAt index args
-              f.read (Some(args[index])), List.removeAt index args
-            | None ->
-              match (check_aliases args f.info.aliases) with
-              | Some index ->
-                let args = List.removeAt index args
-                f.read (Some(args[index])), List.removeAt index args
-              | None -> f.read None, args
+              f.read (Some(args.[index])), List.removeAt index args
+            | None -> f.read None, args
       flags = [ f.info ] }
-
-
-  let bind (x : 'a t) (f : 'a -> 'b t) =
-    let f x =
-      let f_param = f x
-      f_param.parser
-
-    { parser = Parser.bind x.parser f
-      flags = x.flags }
 
   let map (x : 'a t) (f : 'a -> 'b) =
     { parser = Parser.map x.parser f
@@ -162,7 +101,6 @@ module Param =
 
   [<Sealed>]
   type ResultBuilder () =
-    member __.Bind(x : 'a t, f : 'a -> 'b t) = bind x f
     member __.BindReturn(x : 'a t, f : 'a -> 'b) = map x f
     member __.MergeSources(x : 'a t, y : 'b t) = both x y
     member __.Return(x : 'a) = return_ x
@@ -171,8 +109,7 @@ module Param =
   let let_syntax = ResultBuilder()
 
 let run_exn (param : unit Param.t) (args : string list) =
-  if List.contains "-help" args
-     || List.contains "--h" args then
+  if List.contains "-help" args then
     printfn ""
     printfn "possible flags:"
     printfn ""
@@ -185,9 +122,11 @@ let run_exn (param : unit Param.t) (args : string list) =
 
     printfn ""
   else
-    (* Since unit Param.t always returns a unit and there should be no remaining arguments in the string list,
-           we can ignore what is returned here *)
-    let (_ : unit), (_ : string list) = Param.parse param args
+    // We ignore the rest of the string instead of asserting that it's empty because we do
+    // the assertion in [Parser.map]. This allows us to halt the execution of the program
+    // (at this point in the code the function would have already ran so it's too late to
+    // error out)
+    let (), (_ : string list) = Param.parse param args
     ()
 
 let run (param : unit Param.t) (args : string list) =

@@ -16,7 +16,6 @@ module Req_test =
       (req_arg : t Arg_type.t)
       "-req"
       "Testing required arg: returns a record of the length of the arg string"
-      [ "--r" ]
 
   let (req_param : t Param.t) = Param.flag (req_flag : t Flag.t)
 
@@ -27,7 +26,6 @@ module No_arg_test =
     Flag.no_arg
       "-no_arg"
       "Testing no arg: returns true if flag is present, false otherwise"
-      [ "--na"; "-no" ]
 
   let (no_arg_param : t Param.t) = Param.flag (no_arg_flag : t Flag.t)
 
@@ -40,7 +38,6 @@ module Opt_test =
       (opt_arg : t Arg_type.t)
       "-opt"
       "Testing optional arg: returns the arg string"
-      [ "--o" ]
 
   let (opt_param : t option Param.t) = Param.flag (opt_flag : t option Flag.t)
 
@@ -49,7 +46,7 @@ module Test =
   let (test_arg : t Arg_type.t) = Arg_type.create (fun string -> string)
 
   let (test_flag : t Flag.t) =
-    Flag.required (test_arg : t Arg_type.t) "-test" "Test flag doc" []
+    Flag.required (test_arg : t Arg_type.t) "-test" "Test flag doc"
 
   let (test_param : t Param.t) = Param.flag (test_flag : t Flag.t)
 
@@ -62,23 +59,6 @@ let run_test
   let x, _ = Param.parse param args
   Assert.AreEqual(expected_output, x)
 
-let test_printed_output
-  (param : unit Param.t)
-  (args : string list)
-  (expected_exit_code : int)
-  (expected_output : string list)
-  (lines_of_output : int)
-  =
-  use string_writer = new StringWriter()
-  Console.SetOut(string_writer)
-  Assert.AreEqual(expected_exit_code, (run param args))
-
-  let output =
-    string_writer.ToString().Split("\n")
-    |> Array.toList
-    |> List.take lines_of_output
-
-  Assert.AreEqual(expected_output, output)
 
 [<Test>]
 [<Category("Command_tests")>]
@@ -110,12 +90,12 @@ let ``flags`` () =
   let no_args = [ "{ length = 4 }", true, "no opt" ]
   run_test no_args x [ "-req"; "test"; "-no_arg" ]
 
-  let aliases = [ "{ length = 4 }", true, "opt" ]
-  run_test aliases x [ "--r"; "test"; "-no"; "--o"; "opt" ]
-
 [<Test>]
 [<Category("Command_tests")>]
 let ``help_test`` () =
+  use string_writer = new StringWriter()
+  Console.SetOut(string_writer)
+
   let test_param = Test.test_param
 
   let x =
@@ -124,33 +104,47 @@ let ``help_test`` () =
       return printf "%A" test
     }
 
-  let expected_output =
-    [ ""; "possible flags:"; ""; "-test                Test flag doc" ]
+  Assert.AreEqual(0, (run x [ "-help" ]))
+  let output = string_writer.ToString()
 
-  test_printed_output x [ "-help" ] 0 expected_output 4
-  test_printed_output x [ "--h" ] 0 expected_output 4
+  let expected_output =
+    "
+possible flags:
+
+-test                Test flag doc
+
+"
+
+  Assert.AreEqual(output, expected_output)
 
 [<Test>]
 [<Category("Command_tests")>]
 let ``unknown_flag`` () =
+  use string_writer = new StringWriter()
+  Console.SetOut(string_writer)
 
   let test_param = Opt_test.opt_param
 
   let x =
     Param.let_syntax {
-      let! (test : Test.t option) = (test_param : Test.t option Param.t)
+      let! (test : Opt_test.t option) = (test_param : Opt_test.t option Param.t)
       return printf "%A" test
     }
 
-  let expected_output =
-    [ "String"
-      "  \"System.Exception: Unknown flag -unknown, refer to -help for possible flags" ]
+  Assert.AreEqual(1, run x [ "-unknown" ])
+  let output = string_writer.ToString().Split("\n")
 
-  test_printed_output x [ "-unknown" ] 1 expected_output 2
+  let expected_output =
+    "String  \"System.Exception: Unknown flag -unknown, refer to -help for possible flags"
+
+  Assert.AreEqual(output.[0] + output.[1], expected_output)
 
 [<Test>]
 [<Category("Command_tests")>]
 let ``no_required_arg`` () =
+  use string_writer = new StringWriter()
+  Console.SetOut(string_writer)
+
   let test_param = Test.test_param
 
   let x =
@@ -159,7 +153,10 @@ let ``no_required_arg`` () =
       return printf "%A" test
     }
 
-  let expected_output =
-    [ "String"; "  \"System.Exception: Required flag -test not supplied, refer to -help" ]
+  Assert.AreEqual(1, run x [])
+  let output = string_writer.ToString().Split("\n")
 
-  test_printed_output x [] 1 expected_output 2
+  let expected_output =
+    "String  \"System.Exception: Required flag -test not supplied, refer to -help"
+
+  Assert.AreEqual(output.[0] + output.[1], expected_output)

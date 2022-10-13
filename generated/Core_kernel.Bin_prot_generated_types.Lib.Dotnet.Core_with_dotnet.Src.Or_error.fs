@@ -9,8 +9,8 @@ module T = struct
       Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Error.T.bin_size_t
       v
   let bin_write_t _write_a buf pos v =
-    (Core_kernel.Bin_prot_generated_types.Result.bin_write_t _write_a
-       Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Error.T.bin_write_t)
+    Core_kernel.Bin_prot_generated_types.Result.bin_write_t _write_a
+      Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Error.T.bin_write_t
       buf pos v
   let bin_writer_t bin_writer_a =
     {
@@ -56,7 +56,7 @@ module Stable = struct
   module V2 = struct
     type 'a t = 'a T.t
     let bin_size_t _size_of_a v = T.bin_size_t _size_of_a v
-    let bin_write_t _write_a buf pos v = (T.bin_write_t _write_a) buf pos v
+    let bin_write_t _write_a buf pos v = T.bin_write_t _write_a buf pos v
     let bin_writer_t bin_writer_a =
       {
         Bin_prot.Type_class.size =

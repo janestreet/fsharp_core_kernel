@@ -6,14 +6,9 @@ module Arg_type =
 
 module Flag =
   type 'a t
-
-  val required :
-    'a Arg_type.t -> name : string -> doc : string -> aliases : string list -> 'a t
-
-  val optional :
-    'a Arg_type.t -> name : string -> doc : string -> aliases : string list -> 'a option t
-
-  val no_arg : name : string -> doc : string -> aliases : string list -> bool t
+  val required : 'a Arg_type.t -> name : string -> doc : string -> 'a t
+  val optional : 'a Arg_type.t -> name : string -> doc : string -> 'a option t
+  val no_arg : name : string -> doc : string -> bool t
 
 module Param =
   type 'a t
@@ -22,7 +17,6 @@ module Param =
 
   [<Sealed>]
   type ResultBuilder =
-    member Bind : 'a t * ('a -> 'b t) -> 'b t
     member MergeSources : 'a t * 'b t -> ('a * 'b) t
     member BindReturn : 'a t * ('a -> 'b) -> 'b t
     member Return : 'a -> 'a t

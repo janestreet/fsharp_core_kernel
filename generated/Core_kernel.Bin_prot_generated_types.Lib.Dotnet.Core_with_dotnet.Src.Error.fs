@@ -86,8 +86,8 @@ module T = struct
         let pos =
           Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Sexp.T.bin_write_t
             buf pos v2 in
-        (bin_write_option
-           Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Source_code_position.T.bin_write_t)
+        bin_write_option
+          Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Source_code_position.T.bin_write_t
           buf pos v3
     | Tag_t (v1, v2) ->
         let pos = Bin_prot.Write.bin_write_int_8bit buf pos 5 in
@@ -101,8 +101,8 @@ module T = struct
         bin_write_t buf pos v3
     | Of_list (v1, v2) ->
         let pos = Bin_prot.Write.bin_write_int_8bit buf pos 7 in
-        let pos = (bin_write_option bin_write_int64) buf pos v1 in
-        (bin_write_list bin_write_t) buf pos v2
+        let pos = bin_write_option bin_write_int64 buf pos v1 in
+        bin_write_list bin_write_t buf pos v2
     | With_backtrace (v1, v2) ->
         let pos = Bin_prot.Write.bin_write_int_8bit buf pos 8 in
         let pos = bin_write_t buf pos v1 in bin_write_string buf pos v2

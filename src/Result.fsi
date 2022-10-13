@@ -15,5 +15,7 @@ type ResultBuilder =
 val let_syntax : ResultBuilder
 val join : t<t<'a, 'b>, 'b> -> t<'a, 'b>
 val all : t<'a, 'b> list -> t<'a list, 'b>
+val all_unit : t<unit, 'b> list -> t<unit, 'b>
 val combine_errors : t<'a, 'b> list -> t<'a list, 'b list>
 val iter : t<'a, _> -> ('a -> unit) -> unit
+val iter_error : t<_, 'error> -> ('error -> unit) -> unit
