@@ -1,8 +1,8 @@
-Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Error.fs
-Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Or_error.fs
-Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Percent.fs
-Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Sexp.fs
-Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Source_code_position.fs
-Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Unix.Time_float.fs
-Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Unix.Time_ns.fs
-Core_kernel.Bin_prot_generated_types.Result.fs
+Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Error.g.fs
+Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Or_error.g.fs
+Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Percent.g.fs
+Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Sexp.g.fs
+Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Source_code_position.g.fs
+Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Unix.Time_float.g.fs
+Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Unix.Time_ns.g.fs
+Core_kernel.Bin_prot_generated_types.Result.g.fs

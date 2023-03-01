@@ -7,7 +7,7 @@ open System.IO
 open System.Text.RegularExpressions
 
 let sanitize_timestamp string =
-  let regex = new Regex("\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3}-\d{2}:\d{2}: ")
+  let regex = new Regex("\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3}[+-]\d{2}:\d{2}: ")
   regex.Replace(string, "")
 
 [<Test>]
@@ -15,7 +15,7 @@ let ``printfn_every_n even iterations`` () =
   use string_writer = new StringWriter()
   Console.SetOut(string_writer)
 
-  for i in 0 .. 10 do
+  for i in 0..10 do
     Log.Limited.printfn_every_n (2, "%d") i
 
   let output = string_writer.ToString() |> sanitize_timestamp
@@ -26,7 +26,7 @@ let ``printfn_every_n even iterations`` () =
     |> List.map (sprintf "%d\n")
     |> String.concat ""
 
-  Assert.AreEqual(output, expected_output)
+  Assert.AreEqual(expected_output, output)
 
 [<Test>]
 let ``printfn_every_n based on path/line`` () =
@@ -45,4 +45,4 @@ let ``printfn_every_n based on path/line`` () =
 
   let expected_output = first_message + "\n" + second_message + "\n"
 
-  Assert.AreEqual(output, expected_output)
+  Assert.AreEqual(expected_output, output)

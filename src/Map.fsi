@@ -12,7 +12,7 @@ val merge_skewed :
   combine : ('key -> 'value -> 'value -> 'value) ->
   t<'key, 'value> ->
   t<'key, 'value> ->
-  t<'key, 'value>
+    t<'key, 'value>
 
 (** [merge_skewed] preferring to keep the left map's values. *)
 val merge_skewed_left : t<'key, 'value> -> t<'key, 'value> -> t<'key, 'value>

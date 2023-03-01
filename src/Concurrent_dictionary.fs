@@ -8,6 +8,8 @@ let find key (t : t<_, _>) =
   let res, value = t.TryGetValue key
   if res then Some value else None
 
+let find_exn key t = find key t |> Option.get
+
 let remove_exn key (t : t<_, _>) =
   let res, value = t.TryRemove key
 

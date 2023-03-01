@@ -10,9 +10,10 @@ type t = Error.t
 
 let bin_t = Error.bin_t
 
-let to_string t =
+let rec to_string t =
   match t with
   | Error.String x -> x
+  | Error.Tag_t (x, t) -> sprintf $"({x} {to_string t})"
   | (_ : t) -> sprintf "%A" t
 
 let of_list ts =

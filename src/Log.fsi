@@ -13,9 +13,9 @@ val printfn : Printf.TextWriterFormat<'a> -> 'a
 type Limited =
   class
     static member printfn_every_n :
-      n : int
-      * format : Printf.StringFormat<'a, unit>
-      * [<CallerFilePath; Optional; DefaultParameterValue("")>] path : string
-      * [<CallerLineNumber; Optional; DefaultParameterValue(0)>] line : int ->
-      'a
+      n : int *
+      format : Printf.StringFormat<'a, unit> *
+      [<CallerFilePath; Optional; DefaultParameterValue("")>] path : string *
+      [<CallerLineNumber; Optional; DefaultParameterValue(0)>] line : int ->
+        'a
   end

@@ -17,6 +17,8 @@
     <Compile Include="User_groups_test.fs" />
     <Compile Include="Map_test.fs" />
     <Compile Include="Command_test.fs" />
+    <Compile Include="String_extensions.fs" />
+    <Compile Include="Task_test.fs" />
   </ItemGroup>
 
   <ItemGroup>

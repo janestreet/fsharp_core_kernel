@@ -29,16 +29,15 @@ let windows_groups () =
 
 
 let linux_groups () =
-  Or_error.try_with
-    (fun () ->
-      let process_ = new Process()
-      let start_info = new ProcessStartInfo("/usr/bin/groups")
-      start_info.RedirectStandardOutput <- true
-      process_.StartInfo <- start_info
-      let (_ : bool) = process_.Start()
-      let groups = process_.StandardOutput.ReadToEnd()
-      process_.WaitForExit()
-      groups.Split ' ' |> Array.toList)
+  Or_error.try_with (fun () ->
+    let process_ = new Process()
+    let start_info = new ProcessStartInfo("/usr/bin/groups")
+    start_info.RedirectStandardOutput <- true
+    process_.StartInfo <- start_info
+    let (_ : bool) = process_.Start()
+    let groups = process_.StandardOutput.ReadToEnd()
+    process_.WaitForExit()
+    groups.Split ' ' |> Array.toList)
 
 
 let of_current_user () =

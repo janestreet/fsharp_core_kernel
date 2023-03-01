@@ -14,8 +14,7 @@ let ``of_string_exn equal`` () =
 
 [<Test>]
 let ``of_string_exn raises`` () =
-  Assert.Throws<Exception>
-    (fun () ->
-      Host_and_port.of_string_exn "host:port"
-      |> (ignore : Host_and_port.t -> unit))
+  Assert.Throws<Exception> (fun () ->
+    Host_and_port.of_string_exn "host:port"
+    |> (ignore : Host_and_port.t -> unit))
   |> ignore

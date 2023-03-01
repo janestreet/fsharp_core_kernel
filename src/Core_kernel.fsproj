@@ -12,6 +12,7 @@
     <DebugType>embedded</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Either.fsi" />
     <Compile Include="Either.fs" />
     <Compile Include="List.fsi" />
@@ -46,6 +47,8 @@
     <Compile Include="Integer.fs" />
     <Compile Include="Regex.fsi" />
     <Compile Include="Regex.fs" />
+    <Compile Include="Command.fsi" />
+    <Compile Include="Command.fs" />
     <Compile Include="Host_and_port.fsi" />
     <Compile Include="Host_and_port.fs" />
     <Compile Include="Time_float.fsi" />
@@ -66,10 +69,12 @@
     <Compile Include="IPAddress.fs" />
     <Compile Include="User_groups.fsi" />
     <Compile Include="User_groups.fs" />
-    <Compile Include="Command.fsi" />
-    <Compile Include="Command.fs" />
     <Compile Include="Concurrent_bag.fsi" />
     <Compile Include="Concurrent_bag.fs" />
+    <Compile Include="String_extensions.fsi" />
+    <Compile Include="String_extensions.fs" />
+    <Compile Include="Task.fsi" />
+    <Compile Include="Task.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\generated\Core_kernel.Bin_prot_generated_types.fsproj" />

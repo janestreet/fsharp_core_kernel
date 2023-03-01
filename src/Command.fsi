@@ -4,11 +4,17 @@ module Arg_type =
   type 'a t
   val create : (string -> 'a) -> 'a t
 
+  val string : string t
+  val float : float t
+  val int : int t
+
 module Flag =
   type 'a t
   val required : 'a Arg_type.t -> name : string -> doc : string -> 'a t
   val optional : 'a Arg_type.t -> name : string -> doc : string -> 'a option t
   val no_arg : name : string -> doc : string -> bool t
+
+  val map : ('a -> 'b) -> 'a t -> 'b t
 
 module Param =
   type 'a t
@@ -24,5 +30,10 @@ module Param =
 
   val let_syntax : ResultBuilder
 
-val run_exn : unit Param.t -> string list -> unit
-val run : unit Param.t -> string list -> int
+type t
+
+val group : {| summary : string |} -> (string * t) list -> t
+val basic : {| summary : string |} -> unit Param.t -> t
+
+val run_exn : string list -> t -> unit
+val run : string list -> t -> int

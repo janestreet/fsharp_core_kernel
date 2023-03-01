@@ -6,6 +6,8 @@ type t<'key, 'value> = ConcurrentDictionary<'key, 'value>
 
 val find : 'key -> t<'key, 'value> -> 'value option
 
+val find_exn : 'key -> t<'key, 'value> -> 'value
+
 val remove_exn : 'key -> t<'key, 'value> -> 'value
 
 val add_exn : 'key -> 'value -> t<'key, 'value> -> unit

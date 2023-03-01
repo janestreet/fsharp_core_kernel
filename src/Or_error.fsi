@@ -16,14 +16,14 @@ val bin_t : 'a Bin_prot.Type_class.t -> 'a t Bin_prot.Type_class.t
 type Error =
   class
     static member string :
-      message : string
-      * [<CallerFilePath; Optional; DefaultParameterValue("")>] path : string
-      * [<CallerLineNumber; Optional; DefaultParameterValue(0)>] line : int ->
-      _ t
+      message : string *
+      [<CallerFilePath; Optional; DefaultParameterValue("")>] path : string *
+      [<CallerLineNumber; Optional; DefaultParameterValue(0)>] line : int ->
+        _ t
 
     static member format :
-      format : Printf.StringFormat<'a, 'b t>
-      * [<CallerFilePath; Optional; DefaultParameterValue("")>] path : string
-      * [<CallerLineNumber; Optional; DefaultParameterValue(0)>] line : int ->
-      'a
+      format : Printf.StringFormat<'a, 'b t> *
+      [<CallerFilePath; Optional; DefaultParameterValue("")>] path : string *
+      [<CallerLineNumber; Optional; DefaultParameterValue(0)>] line : int ->
+        'a
   end

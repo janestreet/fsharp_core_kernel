@@ -1,37 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+     <PropertyGroup>
+     <TargetFramework>netstandard2.0</TargetFramework>
+     <!-- 1182: Warn on unused.
+     3218: Check that argument names in signatures and implementations match. -->
+     <OtherFlags>--warnaserror+ --warnon:1182,3218</OtherFlags>
+     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+     <EmbedAllSources>true</EmbedAllSources>
+     <DebugType>embedded</DebugType>
+     </PropertyGroup>
 
-         <Project Sdk="Microsoft.NET.Sdk">
-         <PropertyGroup>
-         <TargetFramework>netstandard2.0</TargetFramework>
-         <!-- 3370: Ignore deprecation info messages for dereferencing using [!] instead of [.Value] in the generated files since they are generated using OCaml and it will be backward compatible (FS-1111).
+     <ItemGroup>
+         <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Unix.Time_ns.g.fs" />
+    <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Unix.Time_float.g.fs" />
+    <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Sexp.g.fs" />
+    <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Source_code_position.g.fs" />
+    <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Error.g.fs" />
+    <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Percent.g.fs" />
+    <Compile Include="Core_kernel.Bin_prot_generated_types.Result.g.fs" />
+    <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Or_error.g.fs" />
+     </ItemGroup>
 
-              1182: Warn on unused.
+     <ItemGroup>
+         <ProjectReference Include="../../../../lib/dotnet-libs/bin_prot/src/Bin_prot.fsproj" />
+     </ItemGroup>
 
-              3218: Check that argument names in signatures and implementations match.
-
-              mlcompatibility: Turn on the ml compatibility flag, as this code is generated using ocaml -->
-         <OtherFlags>--warnaserror+ --warnon:1182,3218 --nowarn:3370 --mlcompatibility</OtherFlags>
-         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-         <EmbedAllSources>true</EmbedAllSources>
-         <DebugType>embedded</DebugType>
-         </PropertyGroup>
-         <ItemGroup>
-             <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Unix.Time_ns.fs" />
-    <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Unix.Time_float.fs" />
-    <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Sexp.fs" />
-    <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Source_code_position.fs" />
-    <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Error.fs" />
-    <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Percent.fs" />
-    <Compile Include="Core_kernel.Bin_prot_generated_types.Result.fs" />
-    <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Or_error.fs" />
-         </ItemGroup>
-
-         <ItemGroup>
-             <ProjectReference Include="../../../../lib/dotnet-libs/bin_prot/src/Bin_prot.fsproj" />
-         </ItemGroup>
-
-         <Target Name="CleanOutputDirs" AfterTargets="Clean">
-         <RemoveDir Directories="$(BaseIntermediateOutputPath)" /><!-- obj -->
-         <RemoveDir Directories="$(BaseOutputPath)" /><!-- bin -->
-         </Target>
-         </Project>
-         
+     <Target Name="CleanOutputDirs" AfterTargets="Clean">
+     <RemoveDir Directories="$(BaseIntermediateOutputPath)" /><!-- obj -->
+     <RemoveDir Directories="$(BaseOutputPath)" /><!-- bin -->
+     </Target>
+     </Project>
+     

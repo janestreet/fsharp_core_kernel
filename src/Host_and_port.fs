@@ -13,3 +13,5 @@ module Parser =
     | (_ : string array) -> failwithf "not a host and port %s" str
 
 let of_string_exn s = Parser.of_string_exn s
+
+let arg_type = Command.Arg_type.create of_string_exn

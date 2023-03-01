@@ -26,3 +26,7 @@ module Span =
   let to_sec (t : t) = float t / 1e9
 
   let to_time_span (t : t) = TimeSpan.FromTicks(t / 100L)
+
+let now () = of_datetime DateTime.Now
+
+let diff (t1 : t) (t2 : t) = t1 - t2

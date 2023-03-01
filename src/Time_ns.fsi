@@ -15,6 +15,10 @@ module Span =
   val to_sec : t -> float
   val to_time_span : t -> System.TimeSpan
 
+val now : unit -> t
+
+val diff : t -> t -> Span.t
+
 module Stable =
   module V1 =
     type t = Stable.V1.t

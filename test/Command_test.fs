@@ -103,15 +103,18 @@ let ``help_test`` () =
       let! (test : Test.t) = (test_param : Test.t Param.t)
       return printf "%A" test
     }
+    |> basic {| summary = "~Summary~" |}
 
-  Assert.AreEqual(0, (run x [ "-help" ]))
+  Assert.AreEqual(0, (run [ "-help" ] x))
   let output = string_writer.ToString()
 
   let expected_output =
     "
-possible flags:
+~Summary~
 
--test                Test flag doc
+=== flags ===
+
+  [-test]           . Test flag doc
 
 "
 
@@ -130,8 +133,9 @@ let ``unknown_flag`` () =
       let! (test : Opt_test.t option) = (test_param : Opt_test.t option Param.t)
       return printf "%A" test
     }
+    |> basic {| summary = "Summary" |}
 
-  Assert.AreEqual(1, run x [ "-unknown" ])
+  Assert.AreEqual(1, run [ "-unknown" ] x)
   let output = string_writer.ToString().Split("\n")
 
   let expected_output =
@@ -152,11 +156,65 @@ let ``no_required_arg`` () =
       let! (test : Test.t) = (test_param : Test.t Param.t)
       return printf "%A" test
     }
+    |> basic {| summary = "Summary" |}
 
-  Assert.AreEqual(1, run x [])
+  Assert.AreEqual(1, run [] x)
   let output = string_writer.ToString().Split("\n")
 
   let expected_output =
     "String  \"System.Exception: Required flag -test not supplied, refer to -help"
 
   Assert.AreEqual(output.[0] + output.[1], expected_output)
+
+[<Test>]
+[<Category("Command_tests")>]
+let ``group_help`` () =
+  use string_writer = new StringWriter()
+  Console.SetOut(string_writer)
+
+  let test_param = Test.test_param
+
+  let simple_group =
+    [ "X"; "YY"; "ZZZ" ]
+    |> List.map (fun subcommand ->
+      let command =
+        Param.let_syntax {
+          let! (test : Test.t) = (test_param : Test.t Param.t)
+          return printf "%s: %A" subcommand test
+        }
+        |> basic {| summary = sprintf "Summary for %s" subcommand |}
+
+      subcommand, command)
+    |> group {| summary = "~Group Summary~" |}
+
+  let nested_group =
+    [ "A"; "BB"; "CCC" ]
+    |> List.map (fun subcommand -> subcommand, simple_group)
+    |> group {| summary = "~Nested Group Summary~" |}
+
+  Assert.AreEqual(0, (run [ "-help" ] nested_group))
+  Assert.AreEqual(0, (run [ "A"; "-help" ] nested_group))
+  let output = string_writer.ToString()
+
+  let expected_output =
+    "
+~Nested Group Summary~
+
+=== subcommands ===
+
+  A                 . ~Group Summary~
+  BB                . ~Group Summary~
+  CCC               . ~Group Summary~
+
+
+~Group Summary~
+
+=== subcommands ===
+
+  X                 . Summary for X
+  YY                . Summary for YY
+  ZZZ               . Summary for ZZZ
+
+"
+
+  Assert.AreEqual(output, expected_output)

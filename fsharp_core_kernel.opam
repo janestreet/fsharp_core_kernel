@@ -13,6 +13,7 @@ depends: [
   "ocaml" {>= "4.08.0"}
   "dune" {>= "2.0.0"}
 ]
+available: arch != "arm32" & arch != "x86_32"
 synopsis: "Extensions of the dotnet standard library"
 description: "
 Core_kernel contains F# libraries that are shared across all of our F# projects. It is meant to mirror the use-case of our OCaml Core library. Many libraries just alias dotnet standard library tools to be consistent with Jane Street's naming style.

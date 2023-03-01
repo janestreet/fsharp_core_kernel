@@ -18,14 +18,14 @@ val tagf : Printf.StringFormat<'a, (t -> t)> -> 'a
 type Of =
   class
     static member string :
-      message : string
-      * [<CallerFilePath; Optional; DefaultParameterValue("")>] path : string
-      * [<CallerLineNumber; Optional; DefaultParameterValue(0)>] line : int ->
-      t
+      message : string *
+      [<CallerFilePath; Optional; DefaultParameterValue("")>] path : string *
+      [<CallerLineNumber; Optional; DefaultParameterValue(0)>] line : int ->
+        t
 
     static member format :
-      format : Printf.StringFormat<'a, t>
-      * [<CallerFilePath; Optional; DefaultParameterValue("")>] path : string
-      * [<CallerLineNumber; Optional; DefaultParameterValue(0)>] line : int ->
-      'a
+      format : Printf.StringFormat<'a, t> *
+      [<CallerFilePath; Optional; DefaultParameterValue("")>] path : string *
+      [<CallerLineNumber; Optional; DefaultParameterValue(0)>] line : int ->
+        'a
   end

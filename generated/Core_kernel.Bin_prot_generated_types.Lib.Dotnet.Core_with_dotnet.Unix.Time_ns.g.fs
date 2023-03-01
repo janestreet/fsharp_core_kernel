@@ -2,9 +2,9 @@ module Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Unix.Tim
 open Bin_prot.Write
 open Bin_prot.Read
 open Bin_prot.Size
-module Stable = struct
-  module Span = struct
-    module V2 = struct
+module Stable =
+  module Span =
+    module V2 =
       type t = int64
       let bin_size_t = bin_size_int64
       let bin_write_t = bin_write_int64
@@ -25,9 +25,7 @@ module Stable = struct
           Bin_prot.Type_class.writer = bin_writer_t;
           Bin_prot.Type_class.reader = bin_reader_t
         }
-    end
-  end
-  module V1 = struct
+  module V1 =
     type t = int64
     let bin_size_t = bin_size_int64
     let bin_write_t = bin_write_int64
@@ -48,5 +46,3 @@ module Stable = struct
         Bin_prot.Type_class.writer = bin_writer_t;
         Bin_prot.Type_class.reader = bin_reader_t
       }
-  end
-end

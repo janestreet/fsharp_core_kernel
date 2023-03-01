@@ -2,10 +2,10 @@ module Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Sexp
 open Bin_prot.Write
 open Bin_prot.Read
 open Bin_prot.Size
-module T = struct
+module T =
   type t =
     | Atom of string 
-    | List of t list 
+    | List of list<t> 
   let rec bin_size_t =
     function
     | Atom v1 -> let size = 1 in Bin_prot.Common.(+) size (bin_size_string v1)
@@ -47,9 +47,8 @@ module T = struct
       Bin_prot.Type_class.writer = bin_writer_t;
       Bin_prot.Type_class.reader = bin_reader_t
     }
-end
-module Stable = struct
-  module V1 = struct
+module Stable =
+  module V1 =
     type t = T.t
     let bin_size_t = T.bin_size_t
     let bin_write_t = T.bin_write_t
@@ -70,5 +69,3 @@ module Stable = struct
         Bin_prot.Type_class.writer = bin_writer_t;
         Bin_prot.Type_class.reader = bin_reader_t
       }
-  end
-end

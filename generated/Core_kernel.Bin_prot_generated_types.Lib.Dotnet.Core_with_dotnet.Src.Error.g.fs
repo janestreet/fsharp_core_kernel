@@ -2,16 +2,16 @@ module Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Erro
 open Bin_prot.Write
 open Bin_prot.Read
 open Bin_prot.Size
-module T = struct
+module T =
   type t =
     | Could_not_construct of Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Sexp.T.t 
     | String of string 
     | Exn of Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Sexp.T.t 
     | Sexp of Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Sexp.T.t 
-    | Tag_sexp of string * Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Sexp.T.t * Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Source_code_position.T.t option 
+    | Tag_sexp of string * Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Sexp.T.t * option<Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Source_code_position.T.t> 
     | Tag_t of string * t 
     | Tag_arg of string * Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Sexp.T.t * t 
-    | Of_list of int64 option * t list 
+    | Of_list of option<int64> * list<t> 
     | With_backtrace of t * string 
   let rec bin_size_t =
     function
@@ -175,4 +175,3 @@ module T = struct
       Bin_prot.Type_class.writer = bin_writer_t;
       Bin_prot.Type_class.reader = bin_reader_t
     }
-end

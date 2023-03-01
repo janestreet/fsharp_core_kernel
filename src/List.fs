@@ -15,12 +15,11 @@ let partition_map f ts =
   List.rev firsts, List.rev seconds
 
 let partition_tf f =
-  partition_map
-    (fun t ->
-      if f t then
-        Either.First t
-      else
-        Either.Second t)
+  partition_map (fun t ->
+    if f t then
+      Either.First t
+    else
+      Either.Second t)
 
 // From [lib/base/src/list.ml]
 let transpose t =

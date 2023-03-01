@@ -4,6 +4,10 @@ module Arg_type =
   type 'a t = { parse : string -> 'a }
   let create of_string = { parse = of_string }
 
+  let string = create id
+  let int = create int
+  let float = create float
+
 module Flag =
   module Info =
     type t =
@@ -38,6 +42,8 @@ module Flag =
         { name = name
           doc = doc
           no_arg = true } }
+
+  let map f t = { read = t.read >> f; info = t.info }
 
 module Parser =
   type 'a t = string list -> 'a * string list
@@ -108,29 +114,90 @@ module Param =
 
   let let_syntax = ResultBuilder()
 
-let run_exn (param : unit Param.t) (args : string list) =
-  if List.contains "-help" args then
-    printfn ""
-    printfn "possible flags:"
-    printfn ""
-    let possible_flags = param.flags
+type t =
+  | Base of
+    {| param : unit Param.t
+       summary : string |}
+  | Group of
+    {| subcommands : Map<string, t>
+       summary : string |}
 
-    for flag in possible_flags do
-      let name = flag.name
-      let doc = flag.doc
-      printfn "%-*s %s" 20 name doc
+let summary =
+  function
+  | Base basic -> basic.summary
+  | Group group -> group.summary
 
-    printfn ""
-  else
-    // We ignore the rest of the string instead of asserting that it's empty because we do
-    // the assertion in [Parser.map]. This allows us to halt the execution of the program
-    // (at this point in the code the function would have already ran so it's too late to
-    // error out)
-    let (), (_ : string list) = Param.parse param args
-    ()
+let group (args : {| summary : string |}) subcommands =
+  Group
+    {| subcommands = Map.ofList subcommands
+       summary = args.summary |}
 
-let run (param : unit Param.t) (args : string list) =
-  match Or_error.try_with (fun () -> run_exn param args) with
+let basic (args : {| summary : string |}) param =
+  Base
+    {| param = param
+       summary = args.summary |}
+
+let print_help =
+  function
+  | Group group ->
+    let subcommands =
+      Map.toList group.subcommands
+      |> List.map (fun (subcommand, t) ->
+        let name = sprintf "  %s" subcommand
+        sprintf "%-20s. %s" name (summary t))
+      |> String.concat "\n"
+
+    printfn
+      """
+%s
+
+=== subcommands ===
+
+%s
+"""
+      group.summary
+      subcommands
+  | Base basic ->
+    let flags =
+      basic.param.flags
+      |> List.map (fun flag ->
+        let name = sprintf "  [%s]" flag.name
+        sprintf "%-20s. %s" name flag.doc)
+      |> String.concat "\n"
+
+    printfn
+      """
+%s
+
+=== flags ===
+
+%s
+"""
+      basic.summary
+      flags
+
+let rec run_exn (args : string list) =
+  function
+  | Group group as t ->
+    (match args with
+     | subcommand :: args ->
+       (match Map.tryFind subcommand group.subcommands with
+        | Some t -> run_exn args t
+        | None -> print_help t)
+     | (_ : string list) -> print_help t)
+  | Base basic as t ->
+    if List.contains "-help" args then
+      print_help t
+    else
+      // We ignore the rest of the string instead of asserting that it's empty because we
+      // do the assertion in [Parser.map]. This allows us to halt the execution of the
+      // program (at this point in the code the function would have already ran so it's
+      // too late to error out)
+      let (), (_ : string list) = Param.parse basic.param args
+      ()
+
+let run (args : string list) t =
+  match Or_error.try_with (fun () -> run_exn args t) with
   | Ok _ -> 0
   | Error error ->
     printfn "%A" error

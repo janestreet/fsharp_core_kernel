@@ -2,8 +2,8 @@ module Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Or_e
 open Bin_prot.Write
 open Bin_prot.Read
 open Bin_prot.Size
-module T = struct
-  type 'a t = ('a, Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Error.T.t) Core_kernel.Bin_prot_generated_types.Result.t
+module T =
+  type t<'a> = Core_kernel.Bin_prot_generated_types.Result.t<'a,Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Error.T.t>
   let bin_size_t _size_of_a v =
     Core_kernel.Bin_prot_generated_types.Result.bin_size_t _size_of_a
       Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Error.T.bin_size_t
@@ -51,10 +51,9 @@ module T = struct
       Bin_prot.Type_class.reader =
         (bin_reader_t (bin_a : _ Bin_prot.Type_class.t).reader)
     }
-end
-module Stable = struct
-  module V2 = struct
-    type 'a t = 'a T.t
+module Stable =
+  module V2 =
+    type t<'a> = T.t<'a>
     let bin_size_t _size_of_a v = T.bin_size_t _size_of_a v
     let bin_write_t _write_a buf pos v = T.bin_write_t _write_a buf pos v
     let bin_writer_t bin_writer_a =
@@ -91,5 +90,3 @@ module Stable = struct
         Bin_prot.Type_class.reader =
           (bin_reader_t (bin_a : _ Bin_prot.Type_class.t).reader)
       }
-  end
-end

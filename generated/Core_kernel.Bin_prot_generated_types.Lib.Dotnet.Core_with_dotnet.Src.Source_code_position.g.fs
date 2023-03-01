@@ -2,7 +2,7 @@ module Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Sour
 open Bin_prot.Write
 open Bin_prot.Read
 open Bin_prot.Size
-module T = struct
+module T =
   type t = {
     pos_fname: string ;
     pos_lnum: int64 ;
@@ -52,4 +52,3 @@ module T = struct
       Bin_prot.Type_class.writer = bin_writer_t;
       Bin_prot.Type_class.reader = bin_reader_t
     }
-end
