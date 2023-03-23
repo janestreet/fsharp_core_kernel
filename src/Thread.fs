@@ -20,3 +20,15 @@ let spawn (desc : string) f =
   th
 
 let spawn_and_ignore desc f = spawn desc f |> (ignore : t -> unit)
+
+let blocking_section sync f =
+  Monitor.Exit sync
+
+  try
+    let res = f ()
+    Monitor.Enter sync
+    res
+  with
+  | exn ->
+    Monitor.Enter sync
+    raise exn

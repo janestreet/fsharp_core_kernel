@@ -16,6 +16,7 @@
     <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Source_code_position.g.fs" />
     <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Error.g.fs" />
     <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Percent.g.fs" />
+    <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Time_float.g.fs" />
     <Compile Include="Core_kernel.Bin_prot_generated_types.Result.g.fs" />
     <Compile Include="Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Or_error.g.fs" />
      </ItemGroup>

@@ -19,3 +19,4 @@ val all_unit : t<unit, 'b> list -> t<unit, 'b>
 val combine_errors : t<'a, 'b> list -> t<'a list, 'b list>
 val iter : t<'a, _> -> ('a -> unit) -> unit
 val iter_error : t<_, 'error> -> ('error -> unit) -> unit
+val try_with : f : (unit -> 'a) -> t<'a, exn>

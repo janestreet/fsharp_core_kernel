@@ -28,6 +28,12 @@ type ResultBuilder () =
 
 let let_syntax = ResultBuilder()
 
+let try_with f =
+  try
+    Ok(f ())
+  with
+  | exn -> Error exn
+
 let iter t f =
   match t with
   | Ok v -> f v

@@ -39,3 +39,16 @@ let merge_skewed
 
 let merge_skewed_left (t1 : t<'key, 'value>) (t2 : t<'key, 'value>) =
   merge_skewed (fun (_ : 'key) left_value (_ : 'value) -> left_value) t1 t2
+
+let of_alist_multi alist =
+  List.fold
+    (fun map (k, v) ->
+      Map.change
+        k
+        (function
+        | None -> Some [ v ]
+        | Some values -> Some(v :: values))
+        map)
+    Map.empty
+    alist
+  |> Map.map (fun (_ : 'a) values -> List.rev values)

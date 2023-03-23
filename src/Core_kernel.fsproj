@@ -75,6 +75,12 @@
     <Compile Include="String_extensions.fs" />
     <Compile Include="Task.fsi" />
     <Compile Include="Task.fs" />
+    <Compile Include="Username.fsi" />
+    <Compile Include="Username.fs" />
+    <Compile Include="Pipe.fsi" />
+    <Compile Include="Pipe.fs" />
+    <Compile Include="Timing_wheel.fsi" />
+    <Compile Include="Timing_wheel.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\generated\Core_kernel.Bin_prot_generated_types.fsproj" />
@@ -82,5 +88,6 @@
   <ItemGroup>
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
+    <PackageReference Include="System.Threading.Channels" Version="7.0.0" />
   </ItemGroup>
 </Project>

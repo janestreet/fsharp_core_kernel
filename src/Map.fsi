@@ -16,3 +16,5 @@ val merge_skewed :
 
 (** [merge_skewed] preferring to keep the left map's values. *)
 val merge_skewed_left : t<'key, 'value> -> t<'key, 'value> -> t<'key, 'value>
+
+val of_alist_multi : ('a * 'b) list -> t<'a, 'b list>
