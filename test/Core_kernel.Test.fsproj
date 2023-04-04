@@ -19,6 +19,7 @@
     <Compile Include="Command_test.fs" />
     <Compile Include="String_extensions.fs" />
     <Compile Include="Task_test.fs" />
+    <Compile Include="Waithandle_extensions.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="nunit" Version="3.13.2" />

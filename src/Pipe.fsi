@@ -34,6 +34,9 @@ val write_async : 'a Writer.t -> 'a -> unit Async
 /// raises if [writer] is closed
 val write_without_pushback : 'a Writer.t -> 'a -> unit
 
+/// like [write_without_pushback] but doesn't raise if [writer] is closed
+val write_without_pushback_if_open : 'a Writer.t -> 'a -> unit
+
 module Read_result =
   type 'a t =
     | Ok of 'a
@@ -60,3 +63,11 @@ val read_now : 'a Reader.t -> 'a Read_now_result.t
 val iter : 'a Reader.t -> f : ('a -> Task) -> Task
 
 val iter_async : 'a Reader.t -> f : ('a -> unit Async) -> unit Async
+
+/// consumes elements from the input reader, applies [f] to said element, then
+/// makes results available via a new reader pipe. Closing the original reader
+/// or writer pipe closes the returned pipe.
+val map : 'a Reader.t -> f : ('a -> 'b) -> 'b Reader.t
+
+/// reads everything into a list that's returned when the pipe is closed
+val to_list : 'a Reader.t -> 'a list Task

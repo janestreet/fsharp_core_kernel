@@ -6,4 +6,5 @@ Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Source_code
 Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Src.Time_float.g.fs
 Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Unix.Time_float.g.fs
 Core_kernel.Bin_prot_generated_types.Lib.Dotnet.Core_with_dotnet.Unix.Time_ns.g.fs
+Core_kernel.Bin_prot_generated_types.Lib.Uuid.Src.Uuid.g.fs
 Core_kernel.Bin_prot_generated_types.Result.g.fs

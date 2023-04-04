@@ -58,9 +58,9 @@ let write (t : 'a Writer.t) value =
 
 let write_async (t : 'a Writer.t) value = write t value |> Async.AwaitTask
 
-let write_without_pushback (t : 'a Writer.t) value =
+let write_without_pushback' (t : 'a Writer.t) value on_closed =
   match is_closed t with
-  | true -> failwith $"Attempted write of {value} to a closed pipe"
+  | true -> on_closed ()
   | false ->
     let writer = t.channel.Writer
 
@@ -69,6 +69,13 @@ let write_without_pushback (t : 'a Writer.t) value =
     match writer.TryWrite value with
     | true -> ()
     | false -> failwith $"Unexpected error when writing {value}!"
+
+let write_without_pushback (t : 'a Writer.t) value =
+  write_without_pushback' t value (fun () ->
+    failwith $"Attempted write of {value} to a closed pipe")
+
+let write_without_pushback_if_open (t : 'a Writer.t) value =
+  write_without_pushback' t value id
 
 module Read_result =
   type 'a t =
@@ -126,3 +133,21 @@ let iter_async (t : 'a Reader.t) (f : 'a -> unit Async) : unit Async =
     }
 
   loop ()
+
+let map (t : 'a Reader.t) (f : 'a -> 'b) : 'b Reader.t =
+  let reader, writer = create ()
+
+  task {
+    do! iter t (fun value -> f value |> write writer)
+    close reader
+  }
+  |> ignore
+
+  reader
+
+let to_list (t : 'a Reader.t) =
+  task {
+    let mutable responses = []
+    do! iter t (fun update -> task { responses <- update :: responses })
+    return (List.rev responses)
+  }

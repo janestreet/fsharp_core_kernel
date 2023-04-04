@@ -77,10 +77,14 @@
     <Compile Include="Task.fs" />
     <Compile Include="Username.fsi" />
     <Compile Include="Username.fs" />
+    <Compile Include="String.fsi" />
+    <Compile Include="String.fs" />
     <Compile Include="Pipe.fsi" />
     <Compile Include="Pipe.fs" />
     <Compile Include="Timing_wheel.fsi" />
     <Compile Include="Timing_wheel.fs" />
+    <Compile Include="Waithandle_extensions.fsi" />
+    <Compile Include="Waithandle_extensions.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\generated\Core_kernel.Bin_prot_generated_types.fsproj" />

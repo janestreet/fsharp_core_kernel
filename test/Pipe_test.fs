@@ -1,6 +1,7 @@
 module Core_kernel.Test.Pipe
 
 open NUnit.Framework
+open System
 open Core_kernel
 
 let assert_ok_read_result expected actual =
@@ -46,6 +47,14 @@ let ``Pipe.write_without_pushback`` () =
 
     let! result = Pipe.read reader
     assert_ok_read_result 2 result
+
+    let! result = Pipe.read reader
+    Assert.AreEqual((Pipe.Read_result.Eof : int Pipe.Read_result.t), result)
+
+    let _ : Exception =
+      Assert.Throws<Exception>(fun () -> Pipe.write_without_pushback writer 3)
+
+    Assert.AreEqual((), Pipe.write_without_pushback_if_open writer 3)
 
     let! result = Pipe.read reader
     Assert.AreEqual((Pipe.Read_result.Eof : int Pipe.Read_result.t), result)
@@ -143,4 +152,38 @@ let ``Pipe.iter_async`` () =
 
     let! result = Pipe.read_async reader
     Assert.AreEqual((Pipe.Read_result.Eof : int Pipe.Read_result.t), result)
+  }
+
+[<Test>]
+let ``Pipe.map`` () =
+  let reader, writer = Pipe.create ()
+  let values = [ 1..10 ]
+  let mult_by_10 i = i * 10
+
+  task {
+    let mapped_reader = Pipe.map reader mult_by_10
+
+    do! Pipe.write writer 1
+    let value = (Pipe.read mapped_reader).Result
+
+    assert_ok_read_result 10 value
+
+    // await in order
+    for value in values do
+      do! Pipe.write writer value
+
+    Pipe.close writer
+    let mutable result = []
+
+    do!
+      Pipe.iter mapped_reader (fun value ->
+        (task { result <- List.append result [ value ] }))
+
+    let expected = List.map mult_by_10 values
+    Assert.AreEqual(result, expected)
+
+    let! result = Pipe.read mapped_reader
+    Assert.AreEqual((Pipe.Read_result.Eof : int Pipe.Read_result.t), result)
+
+    Assert.IsTrue(Pipe.is_closed mapped_reader)
   }
